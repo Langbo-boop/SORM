@@ -1,0 +1,3 @@
+Hello everybody! After I publish the first version of the SORM framework four days ago, I found the version didn't support the ability of creating a table with an object when you are 
+coding your object or if you want to add a self_defined class in the project into table automatically,so in my second commit,I add the function of creating table and databases in the 
+MySQL by adding extra code in the project.Hope you can enjoy the pleasure of coding of my project!
