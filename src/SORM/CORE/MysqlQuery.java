@@ -397,4 +397,88 @@ public class MysqlQuery implements Query{
         }
         return null;
     }
+
+    /**
+     * 根据类对象在数据库中创建对应的表结构
+     * @param clazz 传入的类对象
+     */
+    @Override
+    public void createTable(Class clazz) throws SQLException, ClassNotFoundException {
+        //示例：CREATE TABLE tableName(field fieldType,...)
+        //CREATE TABLE tableName(field fieldType,field fieldType);
+        //获得表名，注意以下函数获得的第一部分是包名.类名，所有需要将包名和点号去掉并且将后面字符串的第一个字符转换为小写
+        if(clazz==null){
+            System.out.println("请不要传入空指针类对象！！！");
+            return;
+        }
+        String ClassNameInfo = clazz.getName();
+        //获得包名与类名的分隔符"."所在的位置
+        int index = ClassNameInfo.indexOf(".");
+        //获取对象的类名
+        String ClassName = ClassNameInfo.substring(index+1,ClassNameInfo.length());
+        //定义表名,转换成功！
+        String tableName = StringUtils.firstChar2LowerCase(ClassName);
+        //获得类属性信息
+        Field[] fields=clazz.getDeclaredFields();
+        //声明存储属性名的的数组
+        String[] fieldsName = new String[fields.length];
+        //声明存储每个属性类型的数组
+        String[] fieldsType = new String[fields.length];
+        //根据类属性信息获取属性名和属性类型
+        for(int i=0;i<fields.length;i++){
+            fieldsName[i] = fields[i].getName();
+            if(fields[i].getGenericType().toString().length()>16){
+                //去除掉class java.lang.部分
+                fieldsType[i] =fields[i].getGenericType().toString().substring(16,fields[i].getGenericType()
+                        .toString().length());
+                continue;
+            }
+            fieldsType[i] = fields[i].getGenericType().toString();
+        }
+        //以上已经成功获取对象对应的字段类型和属性信息，可以拼接sql字符串了
+        //还有一个任务就是将java数据类型改为数据库类型，因此需要开发对应的接口函数,已经开发完毕
+        TypeConvertor convertor = new JavaTypeConvertor();//获取将java数据类型转换为数据库类型的数据
+        //拼接sql语句
+        StringBuilder sql = new StringBuilder("CREATE TABLE "+tableName+"(");
+        for(int i=0;i<fieldsName.length;i++){
+            if(i<fieldsName.length-1){//如果i不是最后一个属性
+                sql.append(fieldsName[i]+" "+convertor.javaType2DatabaseType(fieldsType[i])+",");
+                continue;
+            }
+            sql.append(fieldsName[i]+" "+fieldsType[i]+")");//如果是最后一个字段
+        }
+
+        //在数据库中建立相关表
+        executeDML(sql.toString());
+        System.out.println("建表成功或者已存在相关的表！");
+
+    }
+
+    /**
+     *
+     * @param object 传入的对象
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    @Override
+    public void createTable(Object object) throws SQLException, ClassNotFoundException {
+        //获得对象的class对象
+        Class clazz = object.getClass();
+        if(clazz!=null){
+            //调用函数执行建立表操作
+            createTable(clazz);
+        }else{
+            System.out.println("请先建立类！对象传入存在错误！！！");
+        }
+    }
+
+    /**
+     * 创建数据库表
+     * @param DBName 传入的数据库名
+     */
+    @Override
+    public void createDataBase(String DBName) throws SQLException, ClassNotFoundException {
+        String sql = "CREATE DATABASE "+DBName;
+        executeDML(sql);
+    }
 }

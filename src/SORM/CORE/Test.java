@@ -1,5 +1,7 @@
 package SORM.CORE;
 
+import po.House;
+
 import java.sql.SQLException;
 
 /**
@@ -17,17 +19,22 @@ public class Test {
         System.out.println("查询的年龄为："+age);
     }
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, SQLException, ClassNotFoundException {
-        long startTime = System.currentTimeMillis();
-        for(int i=0;i<40000;i++){
-            query();
-        }
-        long endTime = System.currentTimeMillis();
-        System.out.println("加连接池的耗时为:"+(endTime-startTime)+"ms");
-        /**
-         * 不加连接池的耗时约等于41312ms
-         * 加连接池的耗时为2023ms，效率提升了差不多20倍
-         * 即使数量再次增加，连接池的效率依然很高
-         */
-
+//        long startTime = System.currentTimeMillis();
+//        for(int i=0;i<40000;i++){
+//            query();
+//        }
+//        long endTime = System.currentTimeMillis();
+//        System.out.println("加连接池的耗时为:"+(endTime-startTime)+"ms");
+//        /**
+//         * 不加连接池的耗时约等于41312ms
+//         * 加连接池的耗时为2023ms，效率提升了差不多20倍
+//         * 即使数量再次增加，连接池的效率依然很高
+//        */
+        //根据自定义类，传入指定对象，在数据库中创建对应的表结构.测试成功
+//        House house = new House(2,"李浪波");
+//        new MysqlQuery().createTable(house);
+        //建立数据库的测试用例,测试成功！
+        String DBName = "LILANGBO";
+        new MysqlQuery().createDataBase(DBName);
     }
 }

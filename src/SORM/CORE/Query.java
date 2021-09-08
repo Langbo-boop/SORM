@@ -109,4 +109,24 @@ public interface Query {
      */
     public Number queryNumber(String sql,Object[] params) throws ClassNotFoundException, SQLException;
 
+    /**
+     * 根据传入类对象在mysql数据库中执行对应的建立表操作
+     * @param clazz 传入的类的Class对象
+     */
+    public void createTable(Class clazz) throws SQLException, ClassNotFoundException;
+
+    /**
+     * 根据传入对象在对应的数据库中建立与该对象对应的表
+     * @param object
+     */
+    public void createTable(Object object) throws SQLException, ClassNotFoundException;
+
+    /**
+     * 创建数据库
+     * @param DBName 传入的数据库名
+     */
+    public void createDataBase(String DBName) throws SQLException, ClassNotFoundException;
+
+
+
 }

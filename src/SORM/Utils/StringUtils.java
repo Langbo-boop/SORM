@@ -18,4 +18,16 @@ public class StringUtils {
          */
         return str.toUpperCase().substring(0,1)+str.substring(1);
     }
+
+    /**
+     * 将一个字符串的首字母变成小写
+     * @param str 目标字符串
+     * @return 转换后的字符串
+     */
+    public static String firstChar2LowerCase(String str){
+        /**
+         * 示例：Apple-->apple
+         */
+        return str.toLowerCase().substring(0,1)+str.substring(1,str.length());
+    }
 }
